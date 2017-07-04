@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
-          package="com.jerey.http"
+          package="com.jerey.httplib"
 >
 
     <application android:allowBackup="true"

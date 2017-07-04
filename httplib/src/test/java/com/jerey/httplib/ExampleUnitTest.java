@@ -1,4 +1,4 @@
-package com.jerey.http;
+package com.jerey.httplib;
 
 import org.junit.Test;
 

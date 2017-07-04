@@ -1,4 +1,4 @@
-package com.jerey.http;
+package com.jerey.httplib;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.jerey.http.test", appContext.getPackageName());
+        assertEquals("com.jerey.httplib.test", appContext.getPackageName());
     }
 }
