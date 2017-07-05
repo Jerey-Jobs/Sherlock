@@ -12,7 +12,7 @@ public interface IBaseDao<T> {
      * @param entity
      * @return
      */
-    Long inset(T entity);
+    Long insert(T entity);
 
     /**
      * @param entity

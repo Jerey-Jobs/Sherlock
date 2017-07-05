@@ -34,7 +34,14 @@ public class SherlockDatabase {
     public synchronized <T extends BaseDao<M>, M> T getDataBaseHelper(Class<T> tClass, Class<M> mClass) {
         BaseDao baseDao = null;
 
-        tClass.getClass().newInstance();
+        try {
+            baseDao = tClass.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

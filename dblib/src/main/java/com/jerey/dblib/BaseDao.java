@@ -19,34 +19,33 @@ public class BaseDao<T> implements IBaseDao<T> {
         return true;
     }
 
-
     @Override
-    public Long inset(Object entity) {
+    public Long insert(T entity) {
         return null;
     }
 
     @Override
-    public int update(Object entity, Object where) {
+    public int update(T entity, T where) {
         return 0;
     }
 
     @Override
-    public int delete(Object where) {
+    public int delete(T where) {
         return 0;
     }
 
     @Override
-    public List query(Object where) {
+    public List<T> query(T where) {
         return null;
     }
 
     @Override
-    public List query(Object where, String orderBy, Integer startIndex, Integer limit) {
+    public List<T> query(T where, String orderBy, Integer startIndex, Integer limit) {
         return null;
     }
 
     @Override
-    public List query(String sql) {
+    public List<T> query(String sql) {
         return null;
     }
 }
