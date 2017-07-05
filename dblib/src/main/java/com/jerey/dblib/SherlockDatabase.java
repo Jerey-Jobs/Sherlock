@@ -3,6 +3,8 @@ package com.jerey.dblib;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 
+import com.jerey.dblib.utils.DBLog;
+
 import java.io.File;
 
 /**
@@ -22,6 +24,7 @@ public class SherlockDatabase {
             file.mkdirs();
         }
         sqliteDatebasePath = file.getAbsolutePath() + "/sherlock.db";
+        DBLog.d(sqliteDatebasePath);
         openDatabase();
     }
 
@@ -37,11 +40,13 @@ public class SherlockDatabase {
         BaseDao baseDao = null;
         try {
             baseDao = tClass.newInstance();
+            baseDao.init(mClass, mSQLiteDatabase);
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+        return (T) baseDao;
     }
 
 
