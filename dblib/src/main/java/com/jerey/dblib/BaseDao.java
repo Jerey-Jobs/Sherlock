@@ -5,9 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.List;
 
 /**
- * Created by Xiamin on 2017/7/4.
+ * @param <T> dao类型
  */
-
 public class BaseDao<T> implements IBaseDao<T> {
 
     private SQLiteDatabase mSQLiteDatabase;

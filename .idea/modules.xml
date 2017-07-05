@@ -3,11 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SherlockHttp.iml" filepath="$PROJECT_DIR$/SherlockHttp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SherlockHttp.iml" filepath="$PROJECT_DIR$/SherlockHttp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/dblib/dblib.iml" filepath="$PROJECT_DIR$/dblib/dblib.iml" />
-      <module fileurl="file://$PROJECT_DIR$/httplib/httplib.iml" filepath="$PROJECT_DIR$/httplib/httplib.iml" />
       <module fileurl="file://$PROJECT_DIR$/httplib/httplib.iml" filepath="$PROJECT_DIR$/httplib/httplib.iml" />
     </modules>
   </component>

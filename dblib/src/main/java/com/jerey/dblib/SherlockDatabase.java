@@ -6,15 +6,17 @@ import android.os.Environment;
 import java.io.File;
 
 /**
- * Created by Xiamin on 2017/7/4.
+ * @author xiamin
+ * @explain 数据库框架入口, 单列
  */
 
 public class SherlockDatabase {
     private String sqliteDatebasePath;
     private SQLiteDatabase mSQLiteDatabase;
-    private static SherlockDatabase instance;
+    private static volatile SherlockDatabase instance;
 
     private SherlockDatabase() {
+        /** 新建数据库 */
         File file = new File(Environment.getExternalStorageDirectory(), "update");
         if (!file.exists()) {
             file.mkdirs();
@@ -33,7 +35,6 @@ public class SherlockDatabase {
      */
     public synchronized <T extends BaseDao<M>, M> T getDataBaseHelper(Class<T> tClass, Class<M> mClass) {
         BaseDao baseDao = null;
-
         try {
             baseDao = tClass.newInstance();
         } catch (InstantiationException e) {
@@ -41,15 +42,19 @@ public class SherlockDatabase {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-
     }
 
 
+    /**
+     * 开启数据库
+     */
     private void openDatabase() {
         this.mSQLiteDatabase = SQLiteDatabase.openOrCreateDatabase(sqliteDatebasePath, null);
     }
 
-
+    /**
+     * @return
+     */
     public static SherlockDatabase getInstance() {
         if (instance == null) {
             synchronized (SherlockDatabase.class) {

@@ -2,10 +2,11 @@ package com.jerey.dblib;
 
 import java.util.List;
 
-/**
- * Created by Xiamin on 2017/7/4.
- */
 
+/**
+ * Dao接口,提供增删改查接口
+ * @param <T>
+ */
 public interface IBaseDao<T> {
     /**
      * 插入数据库
@@ -33,9 +34,18 @@ public interface IBaseDao<T> {
      */
     List<T> query(T where);
 
-
+    /**
+     * @param where
+     * @param orderBy
+     * @param startIndex
+     * @param limit
+     * @return
+     */
     List<T> query(T where, String orderBy, Integer startIndex, Integer limit);
 
-
+    /**
+     * @param sql
+     * @return
+     */
     List<T> query(String sql);
 }
