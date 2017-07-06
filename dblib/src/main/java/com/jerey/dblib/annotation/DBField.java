@@ -16,6 +16,6 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface DBFiled {
+public @interface DBField {
     String value();
 }

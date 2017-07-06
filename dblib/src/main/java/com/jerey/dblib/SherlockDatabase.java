@@ -30,23 +30,13 @@ public class SherlockDatabase {
 
     /**
      * T为dao子类，BaseDao持有M引用
-     * @param tClass
-     * @param mClass
-     * @param <T>
-     * @param <M>
      * @return
      */
-    public synchronized <T extends BaseDao<M>, M> T getDataBaseHelper(Class<T> tClass, Class<M> mClass) {
-        BaseDao baseDao = null;
-        try {
-            baseDao = tClass.newInstance();
-            baseDao.init(mClass, mSQLiteDatabase);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return (T) baseDao;
+    public synchronized <T> DaoHelper<T> getDaoHelper(Class<T> t) {
+        DaoHelper<T> baseDao = null;
+        baseDao = new DaoHelper();
+        baseDao.init(t, mSQLiteDatabase);
+        return baseDao;
     }
 
 
@@ -55,6 +45,11 @@ public class SherlockDatabase {
      */
     private void openDatabase() {
         this.mSQLiteDatabase = SQLiteDatabase.openOrCreateDatabase(sqliteDatebasePath, null);
+    }
+
+
+    public SQLiteDatabase getSQLiteDatabase() {
+        return mSQLiteDatabase;
     }
 
     /**

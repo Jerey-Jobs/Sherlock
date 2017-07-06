@@ -5,8 +5,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
-import com.jerey.dblib.annotation.DBFiled;
+import com.jerey.dblib.annotation.DBField;
 import com.jerey.dblib.annotation.DBTable;
+import com.jerey.dblib.annotation.PrimaryKey;
+import com.jerey.dblib.utils.DBLog;
+import com.jerey.dblib.utils.FieldUtils;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -16,9 +19,19 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * <p>
+ * Entity为实体类
+ * Field类描述的是 类的属性信息
+ * </P>
  * @param <T> dao类型
+ * @author xiamin
  */
-public abstract class BaseDao<T> implements IBaseDao<T> {
+public class DaoHelper<T> implements IBaseDao<T> {
+
+    /**
+     * 列名过滤器
+     */
+    private static String filter = "[^(a-zA-Z0-9_)]";
 
     private SQLiteDatabase mSQLiteDatabase;
 
@@ -94,6 +107,7 @@ public abstract class BaseDao<T> implements IBaseDao<T> {
          * 表的列名数组
          */
         String[] columNames = cursor.getColumnNames();
+        DBLog.i("columNames: " + columNames);
         /**
          * 拿到Field名字
          */
@@ -111,8 +125,8 @@ public abstract class BaseDao<T> implements IBaseDao<T> {
                     /**
                      * 找field列名
                      */
-                    if (field.getAnnotation(DBFiled.class) != null) {
-                        fieldName = field.getAnnotation(DBFiled.class).value();
+                    if (field.getAnnotation(DBField.class) != null) {
+                        fieldName = field.getAnnotation(DBField.class).value();
                     } else {
                         fieldName = field.getName();
                     }
@@ -134,8 +148,7 @@ public abstract class BaseDao<T> implements IBaseDao<T> {
         } finally {
             cursor.close();
         }
-
-
+        DBLog.i("mCacheMap size:" + mCacheMap.size() + " " + mCacheMap);
     }
 
     @Override
@@ -144,7 +157,7 @@ public abstract class BaseDao<T> implements IBaseDao<T> {
 
         ContentValues contentValues = getContentValues(map);
 
-        Long result = mSQLiteDatabase.insert(mTableName,null,contentValues);
+        Long result = mSQLiteDatabase.insert(mTableName, null, contentValues);
 
         return null;
     }
@@ -176,14 +189,14 @@ public abstract class BaseDao<T> implements IBaseDao<T> {
             String cacheKey = null;
             String cacheValue = null;
 
-            if (columField.getAnnotation(DBFiled.class) != null) {
-                cacheKey = columField.getAnnotation(DBFiled.class).value();
+            if (columField.getAnnotation(DBField.class) != null) {
+                cacheKey = columField.getAnnotation(DBField.class).value();
             } else {
                 cacheKey = columField.getName();
             }
 
             try {
-                if (columField.get(entity.toString()) == null) {
+                if (columField.get(entity) == null) {
                     continue;
                 }
                 cacheValue = columField.get(entity).toString();
@@ -192,8 +205,6 @@ public abstract class BaseDao<T> implements IBaseDao<T> {
             }
             ret.put(cacheKey, cacheValue);
         }
-
-
         return ret;
     }
 
@@ -222,6 +233,48 @@ public abstract class BaseDao<T> implements IBaseDao<T> {
         return null;
     }
 
+    /**
+     * <p>
+     * 拼装SQL, 解析UserDao里面的Field与注解
+     * 可以通过复写该方法实现返回自定义的SQL
+     * </p>
+     * @return SQL "create table if not....."
+     */
+    protected String createTableSQL() {
+        StringBuilder stringBuilder = new StringBuilder("create table if not exists ");
+        stringBuilder.append(mTableName);
+        stringBuilder.append(" (");
 
-    protected abstract String createTableSQL();
+        Field[] columFields = entityClass.getFields();
+        for (int i = 0; i < columFields.length; i++) {
+            Field field = columFields[i];
+
+            /**
+             * 找field列名
+             */
+            String fieldName;
+            if (field.getAnnotation(DBField.class) != null) {
+                fieldName = field.getAnnotation(DBField.class).value();
+            } else {
+                fieldName = field.getName();
+            }
+            fieldName = fieldName.replaceAll(filter, "");
+
+            stringBuilder.append(fieldName + " " + FieldUtils.getTypeStringByField(field));
+
+            if (field.getAnnotation(PrimaryKey.class) != null) {
+                stringBuilder.append(" PRIMARY KEY");
+            }
+
+            if (i != (columFields.length - 1)) {
+                stringBuilder.append(", ");
+            }
+        }
+        stringBuilder.append(");");
+        DBLog.w(stringBuilder.toString());
+
+        return stringBuilder.toString();
+    }
+
+
 }
