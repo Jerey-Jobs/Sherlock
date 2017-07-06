@@ -5,9 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.jerey.dblib.DaoHelper;
 import com.jerey.dblib.SherlockDatabase;
 import com.jerey.sherlockhttp.dbtest.User;
-import com.jerey.sherlockhttp.dbtest.UserDao;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,11 +23,27 @@ public class MainActivity extends AppCompatActivity {
                 User user = new User();
                 user.name = "xxx";
                 user.password = "1234";
-                UserDao userDao =
-                        SherlockDatabase.getInstance()
-                                .getDataBaseHelper(UserDao.class, User.class);
+                user.money = 2.222;
+                user.score = 1.2f;
+                DaoHelper<User> userDao = SherlockDatabase.getInstance().getDaoHelper(User.class);
                 userDao.insert(user);
             }
         });
+
+
+        findViewById(R.id.btn_add).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                ContentValues values = new ContentValues();
+//                values.put("user_name", "xiamin1");
+//                values.put("user_password", "xpasw1");
+//                values.put("user_score", 1.11f);
+//                values.put("user_s", true);
+//                values.put("user_double", 2.22222);
+//                SherlockDatabase.getInstance().getSQLiteDatabase().insert("tb_xiamin2", null,
+//                        values);
+            }
+        });
+
     }
 }
