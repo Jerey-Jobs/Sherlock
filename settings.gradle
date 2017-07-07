@@ -1,1 +1,1 @@
-include ':app', ':httplib', ':dblib'
+include ':app', ':httplib', ':dblib', ':sherlockimageloader'
