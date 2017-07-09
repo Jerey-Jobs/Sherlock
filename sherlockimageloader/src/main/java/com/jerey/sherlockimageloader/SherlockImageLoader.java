@@ -15,10 +15,20 @@ import com.jerey.sherlockimageloader.ImageLoaderConfig.ImageLoaderConfig;
 public class SherlockImageLoader {
 
 
+    public ImageLoaderConfig getImageLoaderConfig() {
+        return mImageLoaderConfig;
+    }
+
+    public RequestQueue getRequestQueue() {
+        return mRequestQueue;
+    }
+
     private ImageLoaderConfig mImageLoaderConfig;
     private RequestQueue mRequestQueue;
 
-    /** 单列对象 */
+    /**
+     * 单列对象
+     */
     private static volatile SherlockImageLoader instance;
 
     private SherlockImageLoader() {
@@ -58,11 +68,16 @@ public class SherlockImageLoader {
     }
 
     public void display(ImageView imageView, String url) {
-
+        display(imageView, url, null);
     }
 
-    public void display(ImageView imageView, String url,) {
-
+    /**
+     * @param imageView
+     * @param url
+     * @param callback
+     */
+    public void display(ImageView imageView, String url, Callback callback) {
+        BitmapRequest bitmapRequest = new BitmapRequest();
     }
 
     /**
