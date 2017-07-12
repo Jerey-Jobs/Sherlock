@@ -12,7 +12,17 @@ public class RequestDispacher extends Thread {
 
     private BlockingDeque<BitmapRequest> mBitmapRequests;
 
+    /** Used for telling us to die. */
+    private volatile boolean mQuit = false;
 
+    /**
+     * Forces this dispatcher to quit immediately.  If any requests are still in
+     * the queue, they are not guaranteed to be processed.
+     */
+    public void quit() {
+        mQuit = true;
+        interrupt();
+    }
 
     @Override
     public void run() {
@@ -21,8 +31,19 @@ public class RequestDispacher extends Thread {
             try {
                 BitmapRequest bitmapRequest = mBitmapRequests.take();
 
+                if (bitmapRequest.isCancel()) {
+                    continue;
+                }
+
+
+
             } catch (InterruptedException e) {
+                // We may have been interrupted because it was time to quit.
                 e.printStackTrace();
+                if (mQuit) {
+                    return;
+                }
+                continue;
             }
         }
     }

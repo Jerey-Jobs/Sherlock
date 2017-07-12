@@ -24,8 +24,12 @@ public class BitmapRequest implements Comparable<BitmapRequest> {
     private int serialNo;
     /** 下载完监听 */
     private SherlockImageLoader.Callback mCallback;
-
+    /** 显示设置,要是为空,则使用全局的 */
     private DisplayConfig mDisplayConfig;
+    /** 请求tag,供取消请求时使用 */
+    private Object requestTag;
+    /** 是否被取消 */
+    private boolean isCancel = false;
 
     public BitmapRequest(ImageView imageView,
                          String imageURL,
@@ -51,7 +55,8 @@ public class BitmapRequest implements Comparable<BitmapRequest> {
     /**
      * 拿到全局加载策略，并且通过加载策略完成大小
      */
-    private ILoadPolicy loadPolicy = SherlockImageLoader.getInstance().getImageLoaderConfig().getLoadPolicy();
+    private ILoadPolicy loadPolicy = SherlockImageLoader.getInstance().getImageLoaderConfig()
+            .getLoadPolicy();
 
     @Override
     public int compareTo(@NonNull BitmapRequest o) {
@@ -77,7 +82,8 @@ public class BitmapRequest implements Comparable<BitmapRequest> {
         if (serialNo != request.serialNo) {
             return false;
         }
-        return loadPolicy != null ? loadPolicy.equals(request.loadPolicy) : request.loadPolicy == null;
+        return loadPolicy != null ? loadPolicy.equals(request.loadPolicy) : request.loadPolicy ==
+                null;
     }
 
     public SoftReference<ImageView> getImageViewSoftReference() {
@@ -127,5 +133,27 @@ public class BitmapRequest implements Comparable<BitmapRequest> {
     public void setLoadPolicy(ILoadPolicy loadPolicy) {
         this.loadPolicy = loadPolicy;
     }
+
+
+    public Object getRequestTag() {
+        return requestTag;
+    }
+
+    public void setRequestTag(Object requestTag) {
+        this.requestTag = requestTag;
+    }
+
+    /**
+     * 判断是否请求被取消,这个接口将被多次调用
+     * @return
+     */
+    public boolean isCancel() {
+        return isCancel;
+    }
+
+    public void setCancel(boolean cancel) {
+        isCancel = cancel;
+    }
+
 
 }

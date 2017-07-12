@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.jerey.sherlockimageloader.ImageLoaderConfig.DisplayConfig;
 import com.jerey.sherlockimageloader.ImageLoaderConfig.ImageLoaderConfig;
 
 /**
@@ -37,6 +38,7 @@ public class SherlockImageLoader {
 
     public SherlockImageLoader(ImageLoaderConfig imageLoaderConfig) {
         mImageLoaderConfig = imageLoaderConfig;
+        mRequestQueue = new RequestQueue(mImageLoaderConfig.getTHREAD_COUNT());
     }
 
 
@@ -71,25 +73,32 @@ public class SherlockImageLoader {
         display(imageView, url, null);
     }
 
+
+    public void display(String url, Callback callback) {
+        display(null, url, callback);
+    }
+
     /**
      * @param imageView
      * @param url
      * @param callback
      */
-    public void display(ImageView imageView, String url, Callback callback) {
-        BitmapRequest bitmapRequest = new BitmapRequest();
+    public void display(ImageView imageView, String url, Callback callback, DisplayConfig
+            displayConfig) {
+        BitmapRequest bitmapRequest = new BitmapRequest(imageView, url, callback, displayConfig);
+        mRequestQueue.addRequest(bitmapRequest);
     }
+
 
     /**
      * 供用户自定义使用
      */
     public static interface Callback {
         /**
-         * @param view
          * @param bitmap
          * @param url
          */
-        void onSuccess(ImageView view, Bitmap bitmap, String url);
+        void onSuccess(Bitmap bitmap, String url);
 
     }
 
