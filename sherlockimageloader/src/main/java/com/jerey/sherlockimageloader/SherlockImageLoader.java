@@ -70,12 +70,12 @@ public class SherlockImageLoader {
     }
 
     public void display(ImageView imageView, String url) {
-        display(imageView, url, null);
+        display(imageView, url, null, null);
     }
 
 
     public void display(String url, Callback callback) {
-        display(null, url, callback);
+        display(null, url, callback, null);
     }
 
     /**

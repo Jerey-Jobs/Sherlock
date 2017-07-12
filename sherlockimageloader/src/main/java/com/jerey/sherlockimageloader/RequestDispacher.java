@@ -1,5 +1,9 @@
 package com.jerey.sherlockimageloader;
 
+import com.jerey.sherlockimageloader.loader.ILoader;
+import com.jerey.sherlockimageloader.loader.LoaderManager;
+import com.jerey.sherlockimageloader.utils.L;
+
 import java.util.concurrent.BlockingDeque;
 
 /**
@@ -35,7 +39,12 @@ public class RequestDispacher extends Thread {
                     continue;
                 }
 
-
+                /**
+                 * 处理请求对象
+                 */
+                String type = parseURL(bitmapRequest.getImageURL());
+                ILoader l = LoaderManager.getInstance().getLoaderByType(type);
+                l.loadImage(bitmapRequest);
 
             } catch (InterruptedException e) {
                 // We may have been interrupted because it was time to quit.
@@ -46,5 +55,20 @@ public class RequestDispacher extends Thread {
                 continue;
             }
         }
+    }
+
+    /**
+     * 解析图片来源
+     * @param imageURL
+     * @return
+     */
+    private String parseURL(String imageURL) {
+        if (imageURL.contains("://")) {
+            return imageURL.split("://")[0];
+        }
+
+        L.e("不支持的URL：" + imageURL);
+        return " ";
+
     }
 }

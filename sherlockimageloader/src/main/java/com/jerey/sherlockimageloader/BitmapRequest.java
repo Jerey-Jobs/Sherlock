@@ -155,5 +155,9 @@ public class BitmapRequest implements Comparable<BitmapRequest> {
         isCancel = cancel;
     }
 
+    public ImageView getImageView() {
+        return mImageViewSoftReference.get();
+    }
+
 
 }
