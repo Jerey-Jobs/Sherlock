@@ -27,7 +27,7 @@ public class RequestQueue {
     }
 
     /**
-     * start所有
+     * start各个分发器
      */
     public void start() {
         mRequestDispachers = new RequestDispacher[mThreadCount];
@@ -40,6 +40,7 @@ public class RequestQueue {
 
     /**
      * 停止所有请求,以interrupt异常的方式
+     * 分发器也会停止运行
      */
     public void stop() {
         for (int i = 0; i < mRequestDispachers.length; i++) {
