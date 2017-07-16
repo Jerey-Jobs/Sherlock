@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 import com.jerey.sherlockimageloader.ImageLoaderConfig.DisplayConfig;
 import com.jerey.sherlockimageloader.ImageLoaderConfig.ImageLoaderConfig;
+import com.jerey.sherlockimageloader.cache.DoubleCache;
+import com.jerey.sherlockimageloader.loader.loaderPolicy.ReverseLoaderPolicy;
 
 /**
  * @author xiamin
@@ -32,13 +34,17 @@ public class SherlockImageLoader {
      */
     private static volatile SherlockImageLoader instance;
 
-    private SherlockImageLoader() {
-    }
-
-
-    public SherlockImageLoader(ImageLoaderConfig imageLoaderConfig) {
-        mImageLoaderConfig = imageLoaderConfig;
+    public SherlockImageLoader(Context context, ImageLoaderConfig imageLoaderConfig) {
+        if (imageLoaderConfig != null) {
+            mImageLoaderConfig = imageLoaderConfig;
+        } else {
+            mImageLoaderConfig = new ImageLoaderConfig.Builder()
+                    .setBitmapCache(new DoubleCache(context))
+                    .setLoadPolicy(new ReverseLoaderPolicy())
+                    .build();
+        }
         mRequestQueue = new RequestQueue(mImageLoaderConfig.getTHREAD_COUNT());
+        mRequestQueue.start();
     }
 
 
@@ -55,9 +61,17 @@ public class SherlockImageLoader {
     }
 
 
-    public static void init(ImageLoaderConfig config) {
+    /**
+     * 初始化
+     * @param context
+     */
+    public static void init(Context context) {
+        init(context, null);
+    }
+
+    public static void init(Context context, ImageLoaderConfig config) {
         if (instance == null) {
-            instance = new SherlockImageLoader(config);
+            instance = new SherlockImageLoader(context, config);
         }
     }
 

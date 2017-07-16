@@ -5,6 +5,7 @@ import android.widget.ImageView;
 
 import com.jerey.sherlockimageloader.ImageLoaderConfig.DisplayConfig;
 import com.jerey.sherlockimageloader.loader.loaderPolicy.ILoadPolicy;
+import com.jerey.sherlockimageloader.utils.MD5Utils;
 
 import java.lang.ref.SoftReference;
 
@@ -39,8 +40,14 @@ public class BitmapRequest implements Comparable<BitmapRequest> {
         /** 设置可见的imageView的tag*/
         imageView.setTag(imageURL);
         this.imageURL = imageURL;
+        this.imageUriMD5 = MD5Utils.toMD5(imageURL);
         this.mCallback = callback;
-        this.mDisplayConfig = displayConfig;
+        if (displayConfig != null) {
+            this.mDisplayConfig = displayConfig;
+        } else {
+            this.mDisplayConfig = SherlockImageLoader.getInstance().getImageLoaderConfig()
+                    .getDisplayConfig();
+        }
     }
 
     public int getSerialNo() {

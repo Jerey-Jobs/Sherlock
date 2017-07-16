@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import com.jerey.sherlockimageloader.BitmapRequest;
 import com.jerey.sherlockimageloader.SherlockImageLoader;
 import com.jerey.sherlockimageloader.cache.BitmapCache;
+import com.jerey.sherlockimageloader.utils.L;
 
 /**
  *
@@ -22,6 +23,7 @@ public abstract class BaseLoader implements ILoader {
         Bitmap bitmap = mBitmapCache.get(request);
 
         if (bitmap == null) {
+            L.i("获取缓存失败，先显示Loading图");
             showLoadingImage(request);
 
             bitmap = onLoad(request);
@@ -77,11 +79,28 @@ public abstract class BaseLoader implements ILoader {
             imageView.post(new Runnable() {
                 @Override
                 public void run() {
-
-
+                    updateImageView(request, bitmap);
                 }
             });
         }
+    }
 
+    private void updateImageView(final BitmapRequest request, final Bitmap bitmap) {
+        ImageView imageView = request.getImageView();
+        //加载正常  防止图片错位
+        if (bitmap != null && imageView.getTag().equals(request.getImageURL())) {
+            imageView.setImageBitmap(bitmap);
+        }
+        //有可能加载失败
+        if (bitmap == null
+                && request.getDisplayConfig() != null
+                && request.getDisplayConfig().failedImage != -1) {
+            imageView.setImageResource(request.getDisplayConfig().failedImage);
+        }
+        //监听
+        //回调 给圆角图片  特殊图片进行扩展
+        if (request.getCallback() != null) {
+            request.getCallback().onSuccess(bitmap, request.getImageURL());
+        }
     }
 }

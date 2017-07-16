@@ -9,6 +9,7 @@ import com.jerey.sherlockimageloader.BitmapRequest;
  */
 
 public interface BitmapCache {
+
     /**
      * 缓存bitmap
      * @param bitmapRequest

@@ -1,7 +1,9 @@
 package com.jerey.sherlockimageloader.ImageLoaderConfig;
 
 import com.jerey.sherlockimageloader.cache.BitmapCache;
+import com.jerey.sherlockimageloader.cache.RAMCache;
 import com.jerey.sherlockimageloader.loader.loaderPolicy.ILoadPolicy;
+import com.jerey.sherlockimageloader.loader.loaderPolicy.ReverseLoaderPolicy;
 
 /**
  * 管理ImageLoader的配置项
@@ -11,11 +13,11 @@ import com.jerey.sherlockimageloader.loader.loaderPolicy.ILoadPolicy;
 public class ImageLoaderConfig {
 
     /** 图片缓存配置 */
-    private BitmapCache mBitmapCache;
+    private BitmapCache mBitmapCache = new RAMCache();
 
-    private ILoadPolicy loadPolicy;
+    private ILoadPolicy loadPolicy = new ReverseLoaderPolicy();
 
-    private DisplayConfig displayConfig;
+    private DisplayConfig displayConfig = new DisplayConfig();
     /** 线程数,根据CPU */
     private int THREAD_COUNT = Runtime.getRuntime().availableProcessors();
 

@@ -2,6 +2,7 @@ package com.jerey.sherlockimageloader;
 
 import com.jerey.sherlockimageloader.utils.L;
 
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -12,10 +13,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class RequestQueue {
 
-    PriorityBlockingQueue<BitmapRequest> mRequestQueue = new PriorityBlockingQueue<>();
+    BlockingQueue<BitmapRequest> mRequestQueue = new PriorityBlockingQueue<>();
 
     private AtomicInteger mNo = new AtomicInteger(0);
-
 
     private int mThreadCount;
 

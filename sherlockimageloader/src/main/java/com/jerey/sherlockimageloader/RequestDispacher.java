@@ -4,7 +4,7 @@ import com.jerey.sherlockimageloader.loader.ILoader;
 import com.jerey.sherlockimageloader.loader.LoaderManager;
 import com.jerey.sherlockimageloader.utils.L;
 
-import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * 请求转发线程
@@ -14,10 +14,16 @@ import java.util.concurrent.BlockingDeque;
  */
 public class RequestDispacher extends Thread {
 
-    private BlockingDeque<BitmapRequest> mBitmapRequests;
+    private BlockingQueue<BitmapRequest> mBitmapRequests;
 
     /** Used for telling us to die. */
     private volatile boolean mQuit = false;
+
+
+    public RequestDispacher(BlockingQueue<BitmapRequest> requests) {
+        mBitmapRequests = requests;
+    }
+
 
     /**
      * Forces this dispatcher to quit immediately.  If any requests are still in
