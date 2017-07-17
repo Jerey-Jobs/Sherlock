@@ -20,7 +20,9 @@ public class RAMCache implements BitmapCache {
         mLruCache = new LruCache<String, Bitmap>(maxSize) {
             @Override
             protected int sizeOf(String key, Bitmap value) {
-                return value.getRowBytes() * value.getHeight();
+                int size = value.getRowBytes() * value.getHeight();
+                L.d("size = " + size);
+                return size;
             }
         };
 

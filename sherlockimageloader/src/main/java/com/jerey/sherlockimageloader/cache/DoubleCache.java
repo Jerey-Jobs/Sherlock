@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.jerey.sherlockimageloader.BitmapRequest;
+import com.jerey.sherlockimageloader.utils.L;
 
 /**
  * @author Xiamin
@@ -32,13 +33,14 @@ public class DoubleCache implements BitmapCache {
 
         bitmap = mRAMCache.get(request);
         if (bitmap != null) {
-            Log.d(TAG, "从内存缓存获取bitmap成功");
+            L.d("从内存缓存获取bitmap成功 bitmap: " + bitmap + "size:" + bitmap.getByteCount());
             return bitmap;
         }
 
         bitmap = mROMCache.get(request);
         if (bitmap != null) {
             Log.d(TAG, "从磁盘缓存获取bitmap成功");
+            mRAMCache.put(request, bitmap);
             return bitmap;
         }
         return null;

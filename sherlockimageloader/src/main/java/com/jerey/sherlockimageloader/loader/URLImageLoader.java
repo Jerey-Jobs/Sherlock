@@ -7,6 +7,7 @@ import android.os.Environment;
 import com.jerey.sherlockimageloader.BitmapRequest;
 import com.jerey.sherlockimageloader.utils.BitmapDecoder;
 import com.jerey.sherlockimageloader.utils.ImageViewHelper;
+import com.jerey.sherlockimageloader.utils.L;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -42,6 +43,7 @@ public class URLImageLoader extends BaseLoader {
         try {
             URL url = new URL(urlStr);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(1000 * 10);
 
             is = conn.getInputStream();
             fos = new FileOutputStream(file);
@@ -67,7 +69,7 @@ public class URLImageLoader extends BaseLoader {
             } catch (IOException e) {
             }
         }
-
+        L.d("downloadImgByUrl 下载失败");
         return false;
 
     }

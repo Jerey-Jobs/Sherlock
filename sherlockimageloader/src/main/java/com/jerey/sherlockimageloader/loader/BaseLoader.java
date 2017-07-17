@@ -1,6 +1,8 @@
 package com.jerey.sherlockimageloader.loader;
 
 import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.ImageView;
 
 import com.jerey.sherlockimageloader.BitmapRequest;
@@ -13,9 +15,10 @@ import com.jerey.sherlockimageloader.utils.L;
  */
 public abstract class BaseLoader implements ILoader {
 
-    public BitmapCache mBitmapCache = SherlockImageLoader.getInstance()
+    public static BitmapCache mBitmapCache = SherlockImageLoader.getInstance()
             .getImageLoaderConfig()
             .getmBitmapCache();
+    public static Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     public void loadImage(BitmapRequest request) {
@@ -56,14 +59,15 @@ public abstract class BaseLoader implements ILoader {
     private void showLoadingImage(final BitmapRequest request) {
         if (request.getDisplayConfig() != null) {
             final ImageView imageview = request.getImageView();
-            if (imageview != null) {
-                imageview.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        imageview.setImageResource(request.getDisplayConfig().loadingImage);
-                    }
-                });
+            if (imageview == null) {
+                return;
             }
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    imageview.setImageResource(request.getDisplayConfig().loadingImage);
+                }
+            });
         }
     }
 
@@ -75,26 +79,39 @@ public abstract class BaseLoader implements ILoader {
      */
     protected void deliveryToUIThread(final BitmapRequest request, final Bitmap bitmap) {
         ImageView imageView = request.getImageView();
-        if (imageView != null) {
-            imageView.post(new Runnable() {
-                @Override
-                public void run() {
-                    updateImageView(request, bitmap);
-                }
-            });
+        L.d("deliveryToUIThread imageView = " + imageView);
+        if (imageView == null) {
+            return;
         }
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                updateImageView(request, bitmap);
+            }
+        });
+
     }
 
     private void updateImageView(final BitmapRequest request, final Bitmap bitmap) {
         ImageView imageView = request.getImageView();
+        L.d("更新UI");
+        if (imageView == null) {
+            L.d("为空.返回");
+            return;
+        }
+
         //加载正常  防止图片错位
         if (bitmap != null && imageView.getTag().equals(request.getImageURL())) {
+            L.d("加载正常");
             imageView.setImageBitmap(bitmap);
+        } else {
+            L.d("加载失败,TAG不对");
         }
         //有可能加载失败
         if (bitmap == null
                 && request.getDisplayConfig() != null
                 && request.getDisplayConfig().failedImage != -1) {
+            L.d("加载失败,显示默认");
             imageView.setImageResource(request.getDisplayConfig().failedImage);
         }
         //监听

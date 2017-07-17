@@ -1,5 +1,7 @@
 package com.jerey.sherlockimageloader;
 
+import android.widget.ImageView;
+
 import com.jerey.sherlockimageloader.utils.L;
 
 import java.util.concurrent.BlockingQueue;
@@ -84,6 +86,13 @@ public class RequestQueue {
             L.w("请求添加成功， 编号为：" + request.getSerialNo());
         } else {
             L.w("请求已经存在， 编号为：" + request.getSerialNo());
+        }
+        if (request.getDisplayConfig() != null
+                && request.getDisplayConfig().loadingImage != -1) {
+            ImageView imageView = request.getImageView();
+            if (imageView != null && imageView.getTag().equals(request.getImageURL())) {
+                imageView.setImageResource(request.getDisplayConfig().loadingImage);
+            }
         }
     }
 }

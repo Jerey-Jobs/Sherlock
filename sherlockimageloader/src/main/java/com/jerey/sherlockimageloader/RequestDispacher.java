@@ -44,7 +44,8 @@ public class RequestDispacher extends Thread {
                 if (bitmapRequest.isCancel()) {
                     continue;
                 }
-
+                L.d("开始处理" + bitmapRequest.getSerialNo() + "号请求,线程号:" + Thread.currentThread()
+                        .getId());
                 /**
                  * 处理请求对象
                  */
