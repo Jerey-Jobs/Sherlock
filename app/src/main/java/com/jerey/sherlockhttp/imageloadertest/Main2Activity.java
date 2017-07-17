@@ -15,7 +15,7 @@ import com.jerey.sherlockimageloader.SherlockImageLoader;
 
 public class Main2Activity extends AppCompatActivity {
 
-    public final static String[] imageThumbUrls = new String[]{
+    public final static String[] imageThumbUrls = new String[] {
             "http://img.my.csdn.net/uploads/201407/26/1406383299_1976.jpg",
             "http://img.my.csdn.net/uploads/201407/26/1406383291_6518.jpg",
             "http://img.my.csdn.net/uploads/201407/26/1406383291_8239.jpg",
@@ -103,13 +103,22 @@ public class Main2Activity extends AppCompatActivity {
             "http://img.my.csdn.net/uploads/201407/26/1406382765_7341.jpg"};
 
     GridView mGridView;
+    ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-        mGridView = (GridView) findViewById(R.id.listview);
-        mGridView.setAdapter(new MyAdapter(this));
+     //   mImageView = (ImageView) findViewById(R.id.test_image);
+                mGridView = (GridView) findViewById(R.id.listview);
+                mGridView.setAdapter(new MyAdapter(this));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        SherlockImageLoader.getInstance().display(mImageView, "http://img.my.csdn" +
+//                ".net/uploads/201407/26/1406382765_7341.jpg");
     }
 
     class MyAdapter extends BaseAdapter {

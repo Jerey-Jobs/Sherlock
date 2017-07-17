@@ -19,6 +19,7 @@ public class App extends Application {
                         .setBitmapCache(new DoubleCache(this))
                         .setFailedImage(R.mipmap.ic_launcher)
                         .setLoadingImage(R.drawable.blog)
+                        .setThreadNum(10)
                         .build());
     }
 
