@@ -1,8 +1,10 @@
 package com.jerey.sherlockhttp.imageloadertest;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import com.jerey.sherlockhttp.R;
 import com.jerey.sherlockimageloader.SherlockImageLoader;
 
 public class Main2Activity extends AppCompatActivity {
+    public final static String TAG = Main2Activity.class.getSimpleName();
 
     public final static String[] imageThumbUrls = new String[] {
             "http://img.my.csdn.net/uploads/201407/26/1406383299_1976.jpg",
@@ -109,16 +112,30 @@ public class Main2Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
-     //   mImageView = (ImageView) findViewById(R.id.test_image);
-                mGridView = (GridView) findViewById(R.id.listview);
-                mGridView.setAdapter(new MyAdapter(this));
+        mImageView = (ImageView) findViewById(R.id.test_image);
+        mGridView = (GridView) findViewById(R.id.listview);
+        mGridView.setAdapter(new MyAdapter(this));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        SherlockImageLoader.getInstance().display(mImageView, "http://img.my.csdn" +
-//                ".net/uploads/201407/26/1406382765_7341.jpg");
+        SherlockImageLoader.with(this)
+                .setUrl("http://img.my.csdn.net/uploads/201407/26/1406382765_7341.jpg")
+                .loadingImage(R.mipmap.ic_launcher_round)
+                .errorImage(R.drawable.blog)
+                .into(mImageView);
+
+        SherlockImageLoader.with(this)
+                .setUrl("http://img.my.csdn.net/uploads/201407/26/1406382765_7341.jpg")
+                .loadingImage(R.mipmap.ic_launcher_round)
+                .errorImage(R.drawable.blog)
+                .into(new SherlockImageLoader.Callback() {
+                    @Override
+                    public void onSuccess(Bitmap bitmap, String url) {
+                        Log.i(TAG, "onSuccess: " + bitmap + " url" + url);
+                    }
+                });
     }
 
     class MyAdapter extends BaseAdapter {
@@ -149,10 +166,11 @@ public class Main2Activity extends AppCompatActivity {
             View item = inflater.inflate(R.layout.item, null);
             ImageView imageView = (ImageView) item.findViewById(R.id.iv);
             //请求图片
-            SherlockImageLoader.getInstance().display(imageView, imageThumbUrls[position]);
+            SherlockImageLoader.with(this)
+                    .setUrl(imageThumbUrls[position])
+                    .into(imageView);
             return item;
         }
 
     }
-
 }
