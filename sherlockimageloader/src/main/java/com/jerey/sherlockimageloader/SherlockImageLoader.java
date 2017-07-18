@@ -3,12 +3,11 @@ package com.jerey.sherlockimageloader;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.support.v4.app.Fragment;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.jerey.sherlockimageloader.ImageLoaderConfig.DisplayConfig;
 import com.jerey.sherlockimageloader.ImageLoaderConfig.ImageLoaderConfig;
+import com.jerey.sherlockimageloader.builder.RequestBuilder;
 import com.jerey.sherlockimageloader.cache.DoubleCache;
 import com.jerey.sherlockimageloader.loader.loaderPolicy.ReverseLoaderPolicy;
 
@@ -48,16 +47,8 @@ public class SherlockImageLoader {
     }
 
 
-    public static void with(Fragment fragment) {
-
-    }
-
-    public static void with(View view) {
-
-    }
-
-    public static void with(Context context) {
-
+    public static RequestBuilder with(Object tag) {
+        return new RequestBuilder(tag);
     }
 
 
@@ -104,6 +95,10 @@ public class SherlockImageLoader {
     }
 
 
+    public void display(BitmapRequest bitmapRequest) {
+        mRequestQueue.addRequest(bitmapRequest);
+    }
+
     /**
      * 供用户自定义使用
      */
@@ -113,7 +108,6 @@ public class SherlockImageLoader {
          * @param url
          */
         void onSuccess(Bitmap bitmap, String url);
-
     }
 
 }

@@ -16,5 +16,4 @@ public interface ILoadPolicy {
      * @return
      */
     int compareTo(BitmapRequest request1, BitmapRequest request2);
-
 }

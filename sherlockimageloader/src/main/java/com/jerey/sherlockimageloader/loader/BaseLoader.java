@@ -25,12 +25,19 @@ public abstract class BaseLoader implements ILoader {
         /** 从缓存中取bitmap */
         Bitmap bitmap = mBitmapCache.get(request);
 
+        if (request.isCancel()) {
+            return;
+        }
+
         if (bitmap == null) {
             L.i("获取缓存失败，先显示Loading图");
             showLoadingImage(request);
 
             bitmap = onLoad(request);
 
+            if (request.isCancel()) {
+                return;
+            }
             cacheBitmap(request, bitmap);
         }
 
@@ -80,7 +87,7 @@ public abstract class BaseLoader implements ILoader {
     protected void deliveryToUIThread(final BitmapRequest request, final Bitmap bitmap) {
         ImageView imageView = request.getImageView();
         L.d("deliveryToUIThread imageView = " + imageView);
-        if (imageView == null) {
+        if (request.isCancel()) {
             return;
         }
         handler.post(new Runnable() {
@@ -95,13 +102,10 @@ public abstract class BaseLoader implements ILoader {
     private void updateImageView(final BitmapRequest request, final Bitmap bitmap) {
         ImageView imageView = request.getImageView();
         L.d("更新UI");
-        if (imageView == null) {
-            L.d("为空.返回");
-            return;
-        }
 
         //加载正常  防止图片错位
-        if (bitmap != null && imageView.getTag().equals(request.getImageURL())) {
+        if (bitmap != null && imageView != null && imageView.getTag().equals(request.getImageURL
+                ())) {
             L.d("加载正常");
             imageView.setImageBitmap(bitmap);
         } else {
@@ -109,6 +113,7 @@ public abstract class BaseLoader implements ILoader {
         }
         //有可能加载失败
         if (bitmap == null
+                && imageView != null
                 && request.getDisplayConfig() != null
                 && request.getDisplayConfig().failedImage != -1) {
             L.d("加载失败,显示默认");
@@ -117,6 +122,7 @@ public abstract class BaseLoader implements ILoader {
         //监听
         //回调 给圆角图片  特殊图片进行扩展
         if (request.getCallback() != null) {
+            L.d("回调");
             request.getCallback().onSuccess(bitmap, request.getImageURL());
         }
     }

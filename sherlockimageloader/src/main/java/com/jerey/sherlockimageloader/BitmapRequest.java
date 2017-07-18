@@ -38,7 +38,9 @@ public class BitmapRequest implements Comparable<BitmapRequest> {
                          DisplayConfig displayConfig) {
         mImageViewSoftReference = new SoftReference<ImageView>(imageView);
         /** 设置可见的imageView的tag*/
-        imageView.setTag(imageURL);
+        if (imageView != null) {
+            imageView.setTag(imageURL);
+        }
         this.imageURL = imageURL;
         this.imageUriMD5 = MD5Utils.toMD5(imageURL);
         this.mCallback = callback;
